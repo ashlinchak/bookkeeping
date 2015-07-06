@@ -63,11 +63,17 @@ There are only 5 types of accounts `Bookkeeping::AssetAccount`,
 `Bookkeeping::LiabilityAccount`, `Bookkeeping::IncomeAccount`, `Bookkeeping::ExpenseAccount` and `Bookkeeping::EquityAccount`
 
 You can create own accounts with target type like this:
+```ruby
     Bookkeeping::AssetAccount.create name: 'cash'
+```
 or
+```ruby
     @user.accounts.asset.create name: 'cash'
+```
 or
+```ruby
     Bookkeeping::AssetAccount.create name: 'cash', accountable: @user
+```
     
 By default account can have a negative balance. If you don't want to use a negative balance for this account you can set overdraft_enabled: false
 
@@ -76,6 +82,7 @@ By default account can have a negative balance. If you don't want to use a negat
 
 Every account belongs to accountable. It can be user, company etc. If you want add bookkeping accounts for the User model you can do like this:
 
+```ruby
     class User
       include Bookkeeping::Extension
 
@@ -85,6 +92,7 @@ Every account belongs to accountable. It can be user, company etc. If you want a
         expense :rent, false # if you don't want negative balance
       end
     end
+```
 
 
 ## Entries
