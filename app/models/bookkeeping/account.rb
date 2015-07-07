@@ -51,7 +51,7 @@ module Bookkeeping
       end
 
       def total_balance
-        raise(NoMethodError, "undefined method 'total_balance'") unless self.new.class == Bookkeeping::Account
+        raise(NoMethodError, "undefined method 'total_balance'") unless self == Bookkeeping::Account
 
         Bookkeeping::AssetAccount.balance + Bookkeeping::ExpenseAccount.balance - Bookkeeping::LiabilityAccount.balance - Bookkeeping::EquityAccount.balance - Bookkeeping::IncomeAccount.balance
       end

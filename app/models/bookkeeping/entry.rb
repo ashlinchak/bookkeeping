@@ -19,23 +19,26 @@ module Bookkeeping
     has_many :debit_amounts, class_name: "Bookkeeping::DebitAmount"
     has_many :credit_amounts, class_name: "Bookkeeping::CreditAmount"
 
-    validates :reference, :description, presence: true
+    validates :transactionable, :description, presence: true
     validate :has_credit_amounts?
     validate :has_debit_amounts?
     validate :amounts_cancel?
 
-    def self.prepare(&block)
-      dsl = Bookkeeping::DSL.new
-      dsl.instance_eval &block
-      dsl.build
+    def self.prepare(options = {}, &block)
+      new(options) do |entry|
+        dsl = Bookkeeping::DSL.new(entry)
+        dsl.instance_eval &block
+        dsl.build
+      end
     end
 
+# TODO: not work
     def rollback!(ref = nil)
       tran = self
       res = self.class.prepare do
         tran.debit_amounts.each { |di| debit(di.account, -di.amount) }
         tran.credit_amounts.each { |ci| credit(ci.account, -ci.amount) }
-        reference(ref || tran)
+        transactionable(ref || tran)
         description("Rollback of #{tran.description}")
       end
       self.rollback_transaction_id = res.id
@@ -54,7 +57,7 @@ module Bookkeeping
       end
 
       def amounts_cancel?
-        errors[:base] << "The credit and debit amounts are not equal" if credit_amounts.balance != debit_amounts.balance
+        errors[:base] << "The credit and debit amounts are not equal" if credit_amounts.to_a.sum(&:amount) != debit_amounts.to_a.sum(&:amount)
       end
   end
 end

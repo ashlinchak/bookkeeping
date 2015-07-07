@@ -16,7 +16,7 @@ module Bookkeeping
     belongs_to :entry, class_name: "Bookkeeping::Entry"
     belongs_to :account, class_name: "Bookkeeping::Account"
 
-    validates :type, :amount, :balance_before, :balance_after, presence: true
+    validates :type, :amount, presence: true
 
     def account_name=(name)
       self.account = Account.find_by_name!(name)

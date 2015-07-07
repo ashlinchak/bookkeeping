@@ -1,10 +1,12 @@
 module Bookkeeping
   class DSL
     attr_reader :debits, :credits, :description, :reference
+    attr_accessor :entry
 
-    def initialize
+    def initialize(entry)
       @debits ||= {}
       @credits ||= {}
+      @entry = entry
     end
 
     def debit(account, amount)
@@ -23,18 +25,20 @@ module Bookkeeping
       @description = description
     end
 
-    def reference(reference)
-      @reference = reference
+    def transactionable(transactionable)
+      @transactionable = transactionable
     end
 
     def build
-      Bookkeeping::Entry.new(reference: @reference, description: @description) do
-        credits.each do |account, amount|
-          t.credit_items.build(account: account, amount: amount)
-        end
-        debits.each do |account, amount|
-          t.debit_items.build(account: account, amount: amount)
-        end
+      entry.transactionable = @transactionable || entry.transactionable
+      entry.description = @description || entry.description
+
+      debits.each do |account, amount|
+        entry.debit_amounts.build(account: account, amount: amount)
+      end
+
+      credits.each do |account, amount|
+        entry.credit_amounts.build(account: account, amount: amount)
       end
     end
 
