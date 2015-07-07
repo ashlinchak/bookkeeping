@@ -21,6 +21,7 @@ And then execute:
     rails g bookkeeping
     rake db:migrate
 
+
 ## Basic theory
 
 <http://en.wikipedia.org/wiki/Debits_and_credits>
@@ -49,6 +50,7 @@ equity participants.
 **Equity** consists of the net assets of an entity. Net assets is the
 difference between the total assets of the entity and all its liabilities.
 
+
 ## Accounting Equation
 
 At any given point accounts should satisfy the following equation:
@@ -56,6 +58,7 @@ At any given point accounts should satisfy the following equation:
     Assets + Expenses = Liabilities + Equity + Income
 
 You can verify it with `Account.balanced?`.
+
 
 ## Accounts
 
@@ -94,8 +97,36 @@ Every account belongs to accountable. It can be user, company etc. If you want a
     end
 ```
 
-
 ## Entries
+
+For perform accounting operations you have to create entries. You can do it using gem DSL:
+
+```ruby
+    entry = Bookkeeping::Entry.prepare(description: "Got invoice", transactionable: @invoice) do
+        debit @user.accounts.expense, 100
+        credit @user.accounts.cash, 50
+        credit @user.accounts.debt, 50
+    end
+
+    entry.save!
+```
+or, if you prefere to use only DSL methods:
+
+```ruby
+    entry = Bookkeeping::Entry.prepare do
+        desription "Got inovoice"
+        transactionable @invoice
+        debit @user.accounts.expense, 100
+        credit @user.accounts.cash, 50
+        credit @user.accounts.debt, 50
+    end
+
+    entry.save!
+```
+
+Entry must have an equality of sum amounts for it's debits and credits.
+
+## Tests
 
 TODO
 
