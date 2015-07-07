@@ -7,16 +7,16 @@ require "bookkeeping/version"
 Gem::Specification.new do |s|
   s.name        = "bookkeeping"
   s.version     = Bookkeeping::VERSION
-  s.authors     = ["Alexander"]
-  s.email       = ["ashlinchak@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Bookkeeping."
-  s.description = "TODO: Description of Bookkeeping."
+  s.authors     = ["Alexander Shlinchak"]
+  s.email       = ["minotep@gmail.com"]
+  s.homepage    = "https://github.com/ashlinchak/bookkeeping"
+  s.summary     = "Double Entry Bookkeeping System for Rails."
+  s.description = "The goal of this gem is to build accounting (bookkeeping) system for Rails projects using double entry theory."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
 
-  s.add_dependency "rails", "~> 4.2.3"
+  s.add_dependency "rails", "~> 4.2"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
