@@ -22,7 +22,7 @@ module Bookkeeping
     validates :transactionable, :description, presence: true
     validate :has_credit_amounts?
     validate :has_debit_amounts?
-    validate :amounts_cancel?
+    validate :amounts_equal?
 
     def self.prepare(options = {}, &block)
       new(options) do |entry|
@@ -56,7 +56,7 @@ module Bookkeeping
         errors[:base] << "Entry must have at least one debit amount" if self.debit_amounts.blank?
       end
 
-      def amounts_cancel?
+      def amounts_equal?
         errors[:base] << "The credit and debit amounts are not equal" if credit_amounts.to_a.sum(&:amount) != debit_amounts.to_a.sum(&:amount)
       end
   end
