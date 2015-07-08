@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     bookkeeping (0.0.1)
-      rails (~> 4.2.3)
+      rails (~> 4.2)
 
 GEM
   remote: https://rubygems.org/
@@ -126,6 +126,8 @@ GEM
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
+    shoulda-matchers (2.8.0)
+      activesupport (>= 3.0.0)
     slop (3.6.0)
     sprockets (3.2.0)
       rack (~> 1.0)
@@ -150,4 +152,5 @@ DEPENDENCIES
   pry-byebug (~> 3.1.0)
   pry-rails (~> 0.3.4)
   rspec-rails (~> 3.3.2)
+  shoulda-matchers (~> 2.8.0)
   sqlite3

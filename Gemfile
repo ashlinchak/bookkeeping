@@ -13,11 +13,15 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-group :development, :test do
+group :development do
   gem 'rspec-rails', '~> 3.3.2'
   gem 'pry-rails', '~> 0.3.4'
   gem 'pry-byebug', '~> 3.1.0'
   gem 'pry-rails', '~> 0.3.4'
-  gem 'factory_girl_rails', '~> 4.5.0'
   gem 'annotate', '~> 2.6.10'
+end
+
+group :test do
+  gem 'factory_girl_rails', '~> 4.5.0'
+  gem 'shoulda-matchers', '~> 2.8.0'
 end
