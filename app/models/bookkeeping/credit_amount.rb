@@ -12,5 +12,11 @@
 
 module Bookkeeping
   class CreditAmount < Amount
+
+    after_initialize :init
+
+    def init
+      self.is_debit = false
+    end
   end
 end
