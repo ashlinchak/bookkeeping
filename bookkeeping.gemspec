@@ -24,4 +24,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pry-byebug"
   s.add_development_dependency "pry-rails"
   s.add_development_dependency "factory_girl_rails"
+  s.add_development_dependency "shoulda-matchers"
 end
