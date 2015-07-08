@@ -22,7 +22,6 @@ module Bookkeeping
 
     # Validations
     validates :name, presence: true
-    validate :prevent_overdraft, unless: :overdraft_enabled?
 
     class NotFound < StandardError; end
     class BadKind < StandardError; end
@@ -80,11 +79,5 @@ module Bookkeeping
     def overdraft?
       balance < 0
     end
-
-    private
-
-      def prevent_overdraft
-        errors.add(:balance, :overdraft) if balance < 0
-      end
   end
 end
