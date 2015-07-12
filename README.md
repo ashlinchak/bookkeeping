@@ -126,6 +126,12 @@ or, if you prefere to use only DSL methods:
 
 Entry must have an equality of sum amounts for it's debits and credits.
 
+You can rollback entries:
+
+```ruby
+    @entry.rollback!
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/ashlinchak/bookkeeping/fork )
