@@ -15,6 +15,7 @@ module Bookkeeping
   class Entry < ActiveRecord::Base
 
     belongs_to :transactionable, polymorphic: true
+    belongs_to :rollback_entry, class_name: 'Bookkeeping::Entry'
     has_many :amounts, dependent: :destroy
     has_many :debit_amounts, class_name: "Bookkeeping::DebitAmount"
     has_many :credit_amounts, class_name: "Bookkeeping::CreditAmount"
@@ -28,18 +29,23 @@ module Bookkeeping
       Bookkeeping::DSL.new(new(options), &block).build
     end
 
-# TODO: not work
-    def rollback!(ref = nil)
+    # TODO: not work
+    def rollback(ref = nil)
       tran = self
-      res = self.class.prepare do
+      inverse_entry = self.class.prepare do
         tran.debit_amounts.each { |di| debit(di.account, -di.amount) }
         tran.credit_amounts.each { |ci| credit(ci.account, -ci.amount) }
         transactionable(ref || tran)
         description("Rollback of #{tran.description}")
       end
-      self.rollback_transaction_id = res.id
-      save!
-      res
+      inverse_entry.save!
+
+      unless inverse_entry.new_record?
+        self.rollback_entry = inverse_entry
+        self.save!
+      end
+
+      inverse_entry
     end
 
     private

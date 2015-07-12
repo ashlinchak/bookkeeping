@@ -5,4 +5,11 @@ FactoryGirl.define do
 
     association :accountable, factory: :user
   end
+
+  factory :income, :class => Bookkeeping::IncomeAccount do
+    name "income"
+    overdraft_enabled true
+
+    association :accountable, factory: :user
+  end
 end
