@@ -126,10 +126,6 @@ or, if you prefere to use only DSL methods:
 
 Entry must have an equality of sum amounts for it's debits and credits.
 
-## Tests
-
-TODO
-
 ## Contributing
 
 1. Fork it ( https://github.com/ashlinchak/bookkeeping/fork )
