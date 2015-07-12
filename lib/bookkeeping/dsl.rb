@@ -1,45 +1,58 @@
 module Bookkeeping
   class DSL
-    attr_reader :debits, :credits, :description, :reference
-    attr_accessor :entry
+    attr_reader :__debits, :__credits, :__description, :__reference
 
-    def initialize(entry)
-      @debits ||= {}
-      @credits ||= {}
-      @entry = entry
+    def initialize(entry, &block)
+      @__debits = {}
+      @__credits = {}
+
+      self.extend Bookkeeping::Proxy
+      self.caller = block.binding.eval "self"
+
+      @__entry = entry
+
+      instance_eval &block
     end
 
     def debit(account, amount)
-      @debits ||= {}
-      @debits[account] ||= 0
-      @debits[account] += amount
+      @__debits[account] ||= 0
+      @__debits[account] += amount
     end
 
     def credit(account, amount)
-      @credits ||= {}
-      @credits[account] ||= 0
-      @credits[account] += amount
+      @__credits[account] ||= 0
+      @__credits[account] += amount
     end
 
     def description(description)
-      @description = description
+      @__description = description
     end
 
     def transactionable(transactionable)
-      @transactionable = transactionable
+      @__transactionable = transactionable
+    end
+
+    def entry
+      @__entry
+    end
+
+    def entry=(entry)
+      @__entry = entry
     end
 
     def build
-      entry.transactionable = @transactionable || entry.transactionable
-      entry.description = @description || entry.description
+      entry.transactionable = @__transactionable || entry.transactionable
+      entry.description = @__description || entry.description
 
-      debits.each do |account, amount|
+      __debits.each do |account, amount|
         entry.debit_amounts.build(account: account, amount: amount)
       end
 
-      credits.each do |account, amount|
+      __credits.each do |account, amount|
         entry.credit_amounts.build(account: account, amount: amount)
       end
+
+      entry
     end
 
   end

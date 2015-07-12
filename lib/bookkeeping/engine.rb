@@ -1,3 +1,5 @@
+require "bookkeeping/proxy"
+
 module Bookkeeping
   class Engine < ::Rails::Engine
     isolate_namespace Bookkeeping

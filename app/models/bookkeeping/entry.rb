@@ -25,11 +25,7 @@ module Bookkeeping
     validate :amounts_equal?
 
     def self.prepare(options = {}, &block)
-      new(options) do |entry|
-        dsl = Bookkeeping::DSL.new(entry)
-        dsl.instance_eval &block
-        dsl.build
-      end
+      Bookkeeping::DSL.new(new(options), &block).build
     end
 
 # TODO: not work
@@ -49,15 +45,15 @@ module Bookkeeping
     private
 
       def has_credit_amounts?
-        errors[:base] << "Entry must have at least one credit amount" if self.credit_amounts.blank?
+        errors[:credit_amounts] << "Entry must have at least one credit amount" if self.credit_amounts.blank?
       end
 
       def has_debit_amounts?
-        errors[:base] << "Entry must have at least one debit amount" if self.debit_amounts.blank?
+        errors[:debit_amounts] << "Entry must have at least one debit amount" if self.debit_amounts.blank?
       end
 
       def amounts_equal?
-        errors[:base] << "The credit and debit amounts are not equal" if credit_amounts.to_a.sum(&:amount) != debit_amounts.to_a.sum(&:amount)
+        errors[:amounts_equality] << "The credit and debit amounts are not equal" if credit_amounts.to_a.sum(&:amount) != debit_amounts.to_a.sum(&:amount)
       end
   end
 end
