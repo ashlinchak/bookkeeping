@@ -13,13 +13,13 @@ gem 'bookkeeping'
 
 And then execute:
 
-    $ bundle
+ $ bundle
 
 
 ## Usage
 
-    rails g bookkeeping
-    rake db:migrate
+ rails g bookkeeping
+ rake db:migrate
 
 
 ## Basic theory
@@ -34,10 +34,10 @@ from which future economic benefits are expected to flow to the entity
 
 **Liability** is defined as an obligation of an entity arising from past
 entries or events, the settlement of which may result in the transfer or
-use of assets, provision of services or other yielding of economic benefits in
+use of assets, provision of services or another yielding of economic benefits in
 the future.
 
-**Income** is increases in economic benefits during the accounting period in
+**Income** is increasing in economic benefits during the accounting period in
 the form of inflows or enhancements of assets or decreases of liabilities that
 result in increases in equity, other than those relating to contributions from
 equity participants.
@@ -55,7 +55,7 @@ difference between the total assets of the entity and all its liabilities.
 
 At any given point accounts should satisfy the following equation:
 
-    Assets + Expenses = Liabilities + Equity + Income
+ Assets + Expenses = Liabilities + Equity + Income
 
 You can verify it with `Account.balanced?`.
 
@@ -67,69 +67,69 @@ There are only 5 types of accounts `Bookkeeping::AssetAccount`,
 
 You can create own accounts with target type like this:
 ```ruby
-    Bookkeeping::AssetAccount.create name: 'cash'
+Bookkeeping::AssetAccount.create name: 'cash'
 ```
 or
 ```ruby
-    @user.accounts.asset.create name: 'cash'
+@user.accounts.asset.create name: 'cash'
 ```
 or
 ```ruby
-    Bookkeeping::AssetAccount.create name: 'cash', accountable: @user
+Bookkeeping::AssetAccount.create name: 'cash', accountable: @user
 ```
-    
-By default account can have a negative balance. If you don't want to use a negative balance for this account you can set overdraft_enabled: false
+
+By default, the account can have a negative balance. If you don't want to use a negative balance for this account you can set overdraft_enabled: false
 
 
 ## Accountable
 
-Every account belongs to accountable. It can be user, company etc. If you want add bookkeping accounts for the User model you can do like this:
+Every account belongs to accountable. It can be a user, company, etc. If you want to add bookkeeping accounts for the User model you can do like this:
 
 ```ruby
-    class User
-      include Bookkeeping::Extension
+class User
+  include Bookkeeping::Extension
 
-      has_accounts do
-        income :income
-        asset :cash
-        expense :rent, false # if you don't want negative balance
-      end
-    end
+  has_accounts do
+  income :income
+  asset :cash
+  expense :rent, false # if you don't want negative balance
+  end
+end
 ```
 
 ## Entries
 
-For perform accounting operations you have to create entries. You can do it using gem DSL:
+For performing accounting operations you have to create entries. You can do it using gem DSL:
 
 ```ruby
-    entry = Bookkeeping::Entry.prepare(description: "Got invoice", transactionable: @invoice) do
-        debit @user.accounts.expense, 100
-        credit @user.accounts.cash, 50
-        credit @user.accounts.debt, 50
-    end
+entry = Bookkeeping::Entry.prepare(description: "Got invoice", transactionable: @invoice) do
+  debit @user.accounts.expense, 100
+  credit @user.accounts.cash, 50
+  credit @user.accounts.debt, 50
+end
 
-    entry.save!
+entry.save!
 ```
-or, if you prefere to use only DSL methods:
+or, if you prefer to use only DSL methods:
 
 ```ruby
-    entry = Bookkeeping::Entry.prepare do
-        desription "Got inovoice"
-        transactionable @invoice
-        debit @user.accounts.expense, 100
-        credit @user.accounts.cash, 50
-        credit @user.accounts.debt, 50
-    end
+entry = Bookkeeping::Entry.prepare do
+  description "Got inovoice"
+  transactionable @invoice
+  debit @user.accounts.expense, 100
+  credit @user.accounts.cash, 50
+  credit @user.accounts.debt, 50
+end
 
-    entry.save!
+entry.save!
 ```
 
-Entry must have an equality of sum amounts for it's debits and credits.
+Entry must have equality of sum amounts for its debits and credits.
 
 You can rollback entries:
 
 ```ruby
-    @entry.rollback!
+@entry.rollback!
 ```
 
 ## Contributing
